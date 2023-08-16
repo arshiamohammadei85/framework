@@ -3,6 +3,7 @@
   "description": "Reactoor The Web Framework",
   "license": "MIT",
   "homepage": "https://reactoor.ir",
+  "minimum-stability": "dev",
   "support": {
     "issues": "https://github.com/arshiamohammadei85/Framework/issues",
     "source": "https://github.com/arshiamohammadei85/framework"
