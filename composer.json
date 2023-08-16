@@ -1,7 +1,11 @@
 {
   "name": "arshiamohammadei85/framework",
   "description": "Reactoor The Web Framework Arshiamohammadei:)",
-  "keywords": ["reactoor", "framework", "arshiamohammadei"],
+  "keywords": [
+    "reactoor",
+    "framework",
+    "arshiamohammadei"
+  ],
   "version": "1.0.0",
   "license": "MIT",
   "homepage": "https://reactoor.ir",
@@ -16,6 +20,11 @@
       "email": "08735162656h@gmail.com.com"
     }
   ],
+  "extra": {
+    "branch-alias": {
+      "dev-master": "10.x-dev"
+    }
+  },
   "require": {
     "php": "^8.0",
     "illuminate/view": "^8.0",
