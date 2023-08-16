@@ -6,10 +6,8 @@
     "framework",
     "arshiamohammadei"
   ],
-  "version": "1.0.0",
   "license": "MIT",
   "homepage": "https://reactoor.ir",
-  "minimum-stability": "stable",
   "support": {
     "issues": "https://github.com/arshiamohammadei85/Framework/issues",
     "source": "https://github.com/arshiamohammadei85/framework"
@@ -32,19 +30,5 @@
     "symfony/process": "^6.3",
     "doctrine/dbal": "^3.6",
     "symfony/dotenv": "^6.3"
-  },
-  "provide": {
-    "psr/container-implementation": "1.1|2.0",
-    "psr/simple-cache-implementation": "1.0|2.0|3.0"
-  },
-  "conflict": {
-    "tightenco/collect": "<5.5.33"
-  },
-  "config": {
-    "sort-packages": true,
-    "allow-plugins": {
-      "composer/package-versions-deprecated": true
-    }
-  },
-  "prefer-stable": true
+  }
 }
