@@ -30,5 +30,10 @@
         "symfony/process": "^6.3",
         "doctrine/dbal": "^3.6",
         "symfony/dotenv": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "illustrate\\": "illustrate/framework/"
+        }
     }
 }
