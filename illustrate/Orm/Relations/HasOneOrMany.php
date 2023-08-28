@@ -21,7 +21,7 @@ use illustrate\Database\SQL\SQLStatement;
 use illustrate\ORM\{
     Entity, EntityManager
 };
-use Opis\ORM\Core\{
+use illustrate\ORM\Core\{
     DataMapper, EntityMapper, EntityQuery, ForeignKey, LazyLoader, Proxy, Relation, Query
 };
 

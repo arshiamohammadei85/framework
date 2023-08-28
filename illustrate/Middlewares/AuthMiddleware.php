@@ -1,7 +1,7 @@
 <?php
 
 
-namespace illustrate\middlewares;
+namespace illustrate\Middlewares;
 
 
 use illustrate\Application;

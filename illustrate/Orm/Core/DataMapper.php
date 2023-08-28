@@ -23,7 +23,7 @@ use illustrate\Database\SQL\Select;
 use illustrate\ORM\{
     Entity, EntityManager, IDataMapper
 };
-use Opis\ORM\Relations\{
+use illustrate\ORM\Relations\{
     BelongsTo, HasOneOrMany, ShareOneOrMany
 };
 

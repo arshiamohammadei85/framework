@@ -22,7 +22,7 @@ use illustrate\ORM\EntityManager;
 use illustrate\Database\SQL\{
     Delete, Insert, Join, SQLStatement
 };
-use Opis\ORM\Core\{
+use illustrate\ORM\Core\{
     DataMapper, EntityMapper, EntityQuery, ForeignKey, Junction, LazyLoader, Proxy, Query, Relation
 };
 
