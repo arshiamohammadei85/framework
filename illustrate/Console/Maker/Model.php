@@ -45,7 +45,7 @@ use illustrate\ORM\Entity;
 
 
 
-class '. $name .' Entity 
+class ' . $name .' Entity 
 {
     //code...
 }					
