@@ -133,9 +133,9 @@ class Application extends Container
     {
         $this->triggerEvent(self::EVENT_BEFORE_REQUEST);
         try {
-            echo $this->router->resolve();
+            return $this->router->resolve();
         } catch (\Exception $e) {
-            echo 'error 404 ';
+            return 'error 404 ';
         }
     }
 

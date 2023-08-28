@@ -111,7 +111,7 @@ class Router
             }
         }
         if (is_string($callback)) {
-			return Helpers::view($callback);
+			return view($callback);
         }
         if (is_array($callback)) {
             /**
