@@ -19,8 +19,7 @@ namespace illustrate\Validation\Rules;
 
 use illustrate\Validation\IValidationRule;
 
-class Match implements IValidationRule
-{
+class Match implements IValidationRule{
     /**
      * @inheritdoc
      */

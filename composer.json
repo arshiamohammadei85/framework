@@ -36,7 +36,7 @@
             "illustrate\\": "illustrate/"
         },
     "files": [
-      "illustrate/Helpers/config.php"
+      "illustrate/Helpers/helpers.php"
     ]
     }
 }
