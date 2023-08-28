@@ -5,10 +5,10 @@
  * Licensed under the MIT License
  * =========================================================================== */
 
-namespace ilustrate\Closure;
+namespace illustrate\Closure;
 
 use Closure;
-use ilustrate\Analyzer\ClosureAnalyzer;
+use SuperClosure\Analyzer\ClosureAnalyzer;
 
 /**
  * @deprecated We'll remove this class
@@ -60,3 +60,4 @@ class Analyzer extends ClosureAnalyzer
     }
 
 }
+

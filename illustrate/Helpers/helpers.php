@@ -5,17 +5,54 @@
  * date: 6/16/2023
  * @author: Arshiamohammadei
  */
+
 use illustrate\Application;
 use illustrate\Blade;
 
-if(!function_exists('config')){
-	function config(string $name, string $file){
-		$file = $file.'.php';
-		return Application::$app->configs[$file]->get($name);
-	}
+if (!function_exists('config')) {
+    function config(string $name, string $file)
+    {
+        $file = $file . '.php';
+        return Application::$app->configs[$file]->get($name);
+    }
+}
+if (!function_exists('serialize')) {
+    /**
+     * Serialize
+     *
+     * @param mixed $data
+     * @return string
+     */
+    function serialize($data): string
+    {
+        \illustrate\Closure\SerializableClosure::enterContext();
+        \illustrate\Closure\SerializableClosure::wrapClosures($data);
+        $data = \serialize($data);
+        \illustrate\Closure\SerializableClosure::exitContext();
+        return $data;
+    }
+}
+if (!function_exists('unserialize')) {
+    /**
+     * Unserialize
+     *
+     * @param string $data
+     * @param array|null $options
+     * @return mixed
+     */
+    function unserialize($data, array $options = null): mixed
+    {
+        \illustrate\Closure\SerializableClosure::enterContext();
+        $data = ($options === null || \PHP_MAJOR_VERSION < 7)
+            ? \unserialize($data)
+            : \unserialize($data, $options);
+        \illustrate\Closure\SerializableClosure::unwrapClosures($data);
+        \illustrate\Closure\SerializableClosure::exitContext();
+        return $data;
+    }
 }
 if (!function_exists('dd')) {
-	function dd()
+    function dd()
     {
         array_map(function ($x) {
             var_dump($x);
@@ -25,15 +62,16 @@ if (!function_exists('dd')) {
     }
 }
 if (!function_exists('view')) {
-	function view(string $path,array $data = []){
-		return Application::$app->view->make($path,$data);
-	}	
+    function view(string $path, array $data = [])
+    {
+        return Application::$app->view->make($path, $data);
+    }
 }
 if (!function_exists('e')) {
     /**
      * Escape HTML entities in a string.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -43,28 +81,30 @@ if (!function_exists('e')) {
     }
 }
 
-function object_get(object $object, string $key, $default = null)
-{
-	if (trim($key) == '') {
-		return $object;
-	}
+if (!function_exists('object_get')) {
+    function object_get(object $object, string $key, $default = null)
+    {
+        if (trim($key) == '') {
+            return $object;
+        }
 
-	foreach (explode('.', $key) as $segment) {
-		if (!is_object($object) || !isset($object->{$segment})) {
-			return value($default);
-		}
+        foreach (explode('.', $key) as $segment) {
+            if (!is_object($object) || !isset($object->{$segment})) {
+                return value($default);
+            }
 
-		$object = $object->{$segment};
-	}
+            $object = $object->{$segment};
+        }
 
-	return $object;
+        return $object;
+    }
 }
 if (!function_exists('tap')) {
     /**
      * Call the given Closure with the given value then return the value.
      *
-     * @param  mixed $value
-     * @param  callable  $callback
+     * @param mixed $value
+     * @param callable $callback
      *
      * @return mixed
      */
@@ -80,7 +120,7 @@ if (!function_exists('value')) {
     /**
      * Return the default value of the given value.
      *
-     * @param  mixed $value
+     * @param mixed $value
      * @return mixed
      */
     function value($value)
@@ -93,7 +133,7 @@ if (!function_exists('with')) {
     /**
      * Return the given object. Useful for chaining.
      *
-     * @param  mixed $object
+     * @param mixed $object
      * @return mixed
      */
     function with($object)
@@ -101,13 +141,13 @@ if (!function_exists('with')) {
         return $object;
     }
 }
-if (! function_exists('preg_replace_array')) {
+if (!function_exists('preg_replace_array')) {
     /**
      * Replace a given pattern with each value in the array in sequentially.
      *
-     * @param  string  $pattern
-     * @param  array  $replacements
-     * @param  string  $subject
+     * @param string $pattern
+     * @param array $replacements
+     * @param string $subject
      *
      * @return string
      */
@@ -121,12 +161,12 @@ if (! function_exists('preg_replace_array')) {
     }
 }
 
-if (! function_exists('str_after')) {
+if (!function_exists('str_after')) {
     /**
      * Return the remainder of a string after the first occurrence of a given value.
      *
-     * @param  string  $subject
-     * @param  string  $search
+     * @param string $subject
+     * @param string $search
      *
      * @return string
      */
@@ -136,12 +176,12 @@ if (! function_exists('str_after')) {
     }
 }
 
-if (! function_exists('str_after_last')) {
+if (!function_exists('str_after_last')) {
     /**
      * Return the remainder of a string after the last occurrence of a given value.
      *
-     * @param  string  $subject
-     * @param  string  $search
+     * @param string $subject
+     * @param string $search
      *
      * @return string
      */
@@ -151,7 +191,7 @@ if (! function_exists('str_after_last')) {
             return $subject;
         }
 
-        $position = strrpos($subject, (string) $search);
+        $position = strrpos($subject, (string)$search);
 
         if ($position === false) {
             return $subject;
@@ -161,12 +201,12 @@ if (! function_exists('str_after_last')) {
     }
 }
 
-if (! function_exists('str_before')) {
+if (!function_exists('str_before')) {
     /**
      * Get the portion of a string before the first occurrence of a given value.
      *
-     * @param  string  $subject
-     * @param  string  $search
+     * @param string $subject
+     * @param string $search
      *
      * @return string
      */
@@ -176,18 +216,18 @@ if (! function_exists('str_before')) {
             return $subject;
         }
 
-        $result = strstr($subject, (string) $search, true);
+        $result = strstr($subject, (string)$search, true);
 
         return $result === false ? $subject : $result;
     }
 }
 
-if (! function_exists('str_before_last')) {
+if (!function_exists('str_before_last')) {
     /**
      * Get the portion of a string before the last occurrence of a given value.
      *
-     * @param  string  $subject
-     * @param  string  $search
+     * @param string $subject
+     * @param string $search
      *
      * @return string
      */
@@ -207,13 +247,13 @@ if (! function_exists('str_before_last')) {
     }
 }
 
-if (! function_exists('str_between')) {
+if (!function_exists('str_between')) {
     /**
      * Get the portion of a string between two given values.
      *
-     * @param  string  $subject
-     * @param  string  $from
-     * @param  string  $to
+     * @param string $subject
+     * @param string $from
+     * @param string $to
      *
      * @return string
      */
@@ -227,18 +267,18 @@ if (! function_exists('str_between')) {
     }
 }
 
-if (! function_exists('str_contains')) {
+if (!function_exists('str_contains')) {
     /**
      * Determine if a given string contains a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|string[]  $needles
+     * @param string $haystack
+     * @param string|string[] $needles
      *
      * @return bool
      */
     function str_contains(string $haystack, $needles): bool
     {
-        foreach ((array) $needles as $needle) {
+        foreach ((array)$needles as $needle) {
             if ($needle !== '' && mb_strpos($haystack, $needle) !== false) {
                 return true;
             }
@@ -248,12 +288,12 @@ if (! function_exists('str_contains')) {
     }
 }
 
-if (! function_exists('str_contains_all')) {
+if (!function_exists('str_contains_all')) {
     /**
      * Determine if a given string contains all array values.
      *
-     * @param  string  $haystack
-     * @param  string[]  $needles
+     * @param string $haystack
+     * @param string[] $needles
      *
      * @return bool
      */
@@ -269,21 +309,21 @@ if (! function_exists('str_contains_all')) {
     }
 }
 
-if (! function_exists('str_ends_with')) {
+if (!function_exists('str_ends_with')) {
     /**
      * Determine if a given string ends with a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|string[]  $needles
+     * @param string $haystack
+     * @param string|string[] $needles
      *
      * @return bool
      */
     function str_ends_with(string $haystack, $needles): bool
     {
-        foreach ((array) $needles as $needle) {
+        foreach ((array)$needles as $needle) {
             if (
                 $needle !== '' && $needle !== null
-                && substr($haystack, -strlen($needle)) === (string) $needle
+                && substr($haystack, -strlen($needle)) === (string)$needle
             ) {
                 return true;
             }
@@ -293,12 +333,12 @@ if (! function_exists('str_ends_with')) {
     }
 }
 
-if (! function_exists('str_finish')) {
+if (!function_exists('str_finish')) {
     /**
      * Cap a string with a single instance of a given value.
      *
-     * @param  string  $value
-     * @param  string  $cap
+     * @param string $value
+     * @param string $cap
      *
      * @return string
      */
@@ -306,16 +346,16 @@ if (! function_exists('str_finish')) {
     {
         $quoted = preg_quote($cap, '/');
 
-        return preg_replace('/(?:'.$quoted.')+$/u', '', $value).$cap;
+        return preg_replace('/(?:' . $quoted . ')+$/u', '', $value) . $cap;
     }
 }
 
-if (! function_exists('str_is')) {
+if (!function_exists('str_is')) {
     /**
      * Determine if a given string matches a given pattern.
      *
-     * @param  string|array  $pattern
-     * @param  string  $value
+     * @param string|array $pattern
+     * @param string $value
      *
      * @return bool
      */
@@ -342,7 +382,7 @@ if (! function_exists('str_is')) {
             // pattern such as "library/*", making any string check convenient.
             $pattern = str_replace('\*', '.*', $pattern);
 
-            if (preg_match('#^'.$pattern.'\z#u', $value) === 1) {
+            if (preg_match('#^' . $pattern . '\z#u', $value) === 1) {
                 return true;
             }
         }
@@ -351,11 +391,11 @@ if (! function_exists('str_is')) {
     }
 }
 
-if (! function_exists('str_is_uuid')) {
+if (!function_exists('str_is_uuid')) {
     /**
      * Determine if a given string is a valid UUID.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return bool
      */
@@ -369,11 +409,11 @@ if (! function_exists('str_is_uuid')) {
     }
 }
 
-if (! function_exists('str_kebab')) {
+if (!function_exists('str_kebab')) {
     /**
      * Convert a string to kebab case.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -383,12 +423,12 @@ if (! function_exists('str_kebab')) {
     }
 }
 
-if (! function_exists('str_length')) {
+if (!function_exists('str_length')) {
     /**
      * Return the length of the given string.
      *
-     * @param  string  $value
-     * @param  string|null  $encoding
+     * @param string $value
+     * @param string|null $encoding
      *
      * @return int
      */
@@ -402,13 +442,13 @@ if (! function_exists('str_length')) {
     }
 }
 
-if (! function_exists('str_limit')) {
+if (!function_exists('str_limit')) {
     /**
      * Limit the number of characters in a string.
      *
-     * @param  string  $value
-     * @param  int  $limit
-     * @param  string  $end
+     * @param string $value
+     * @param int $limit
+     * @param string $end
      *
      * @return string
      */
@@ -418,15 +458,15 @@ if (! function_exists('str_limit')) {
             return $value;
         }
 
-        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')).$end;
+        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')) . $end;
     }
 }
 
-if (! function_exists('str_lower')) {
+if (!function_exists('str_lower')) {
     /**
      * Convert the given string to lower-case.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -436,34 +476,34 @@ if (! function_exists('str_lower')) {
     }
 }
 
-if (! function_exists('str_words')) {
+if (!function_exists('str_words')) {
     /**
      * Limit the number of words in a string.
      *
-     * @param  string  $value
-     * @param  int  $words
-     * @param  string  $end
+     * @param string $value
+     * @param int $words
+     * @param string $end
      *
      * @return string
      */
     function str_words(string $value, int $words = 100, string $end = '...'): string
     {
-        preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
+        preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
         if (!isset($matches[0]) || str_length($value) === str_length($matches[0])) {
             return $value;
         }
 
-        return rtrim($matches[0]).$end;
+        return rtrim($matches[0]) . $end;
     }
 }
 
-if (! function_exists('str_match')) {
+if (!function_exists('str_match')) {
     /**
      * Get the string matching the given pattern.
      *
-     * @param  string  $pattern
-     * @param  string  $subject
+     * @param string $pattern
+     * @param string $subject
      *
      * @return string
      */
@@ -479,13 +519,13 @@ if (! function_exists('str_match')) {
     }
 }
 
-if (! function_exists('str_pad_both')) {
+if (!function_exists('str_pad_both')) {
     /**
      * Pad both sides of a string with another.
      *
-     * @param  string  $value
-     * @param  int  $length
-     * @param  string  $pad
+     * @param string $value
+     * @param int $length
+     * @param string $pad
      *
      * @return string
      */
@@ -495,13 +535,13 @@ if (! function_exists('str_pad_both')) {
     }
 }
 
-if (! function_exists('str_pad_left')) {
+if (!function_exists('str_pad_left')) {
     /**
      * Pad the left side of a string with another.
      *
-     * @param  string  $value
-     * @param  int  $length
-     * @param  string  $pad
+     * @param string $value
+     * @param int $length
+     * @param string $pad
      *
      * @return string
      */
@@ -511,13 +551,13 @@ if (! function_exists('str_pad_left')) {
     }
 }
 
-if (! function_exists('str_pad_right')) {
+if (!function_exists('str_pad_right')) {
     /**
      * Pad the right side of a string with another.
      *
-     * @param  string  $value
-     * @param  int  $length
-     * @param  string  $pad
+     * @param string $value
+     * @param int $length
+     * @param string $pad
      *
      * @return string
      */
@@ -527,11 +567,11 @@ if (! function_exists('str_pad_right')) {
     }
 }
 
-if (! function_exists('str_random')) {
+if (!function_exists('str_random')) {
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param  int  $length
+     * @param int $length
      *
      * @return string
      */
@@ -551,13 +591,13 @@ if (! function_exists('str_random')) {
     }
 }
 
-if (! function_exists('str_replace_array')) {
+if (!function_exists('str_replace_array')) {
     /**
      * Replace a given value in the string sequentially with an array.
      *
-     * @param  string  $search
-     * @param  array<int|string, string>  $replace
-     * @param  string  $subject
+     * @param string $search
+     * @param array<int|string, string> $replace
+     * @param string $subject
      *
      * @return string
      */
@@ -568,20 +608,20 @@ if (! function_exists('str_replace_array')) {
         $result = array_shift($segments);
 
         foreach ($segments as $segment) {
-            $result .= (array_shift($replace) ?? $search).$segment;
+            $result .= (array_shift($replace) ?? $search) . $segment;
         }
 
         return $result;
     }
 }
 
-if (! function_exists('str_replace_first')) {
+if (!function_exists('str_replace_first')) {
     /**
      * Replace the first occurrence of a given value in the string.
      *
-     * @param  string  $search
-     * @param  string  $replace
-     * @param  string  $subject
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
      *
      * @return string
      */
@@ -601,13 +641,13 @@ if (! function_exists('str_replace_first')) {
     }
 }
 
-if (! function_exists('str_replace_last')) {
+if (!function_exists('str_replace_last')) {
     /**
      * Replace the last occurrence of a given value in the string.
      *
-     * @param  string  $search
-     * @param  string  $replace
-     * @param  string  $subject
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
      *
      * @return string
      */
@@ -627,13 +667,13 @@ if (! function_exists('str_replace_last')) {
     }
 }
 
-if (! function_exists('str_remove')) {
+if (!function_exists('str_remove')) {
     /**
      * Remove any occurrence of the given string in the subject.
      *
-     * @param  string|array<string>  $search
-     * @param  string  $subject
-     * @param  bool  $caseSensitive
+     * @param string|array<string> $search
+     * @param string $subject
+     * @param bool $caseSensitive
      *
      * @return string
      */
@@ -647,12 +687,12 @@ if (! function_exists('str_remove')) {
     }
 }
 
-if (! function_exists('str_start')) {
+if (!function_exists('str_start')) {
     /**
      * Begin a string with a single instance of a given value.
      *
-     * @param  string  $value
-     * @param  string  $prefix
+     * @param string $value
+     * @param string $prefix
      *
      * @return string
      */
@@ -660,15 +700,15 @@ if (! function_exists('str_start')) {
     {
         $quoted = preg_quote($prefix, '/');
 
-        return $prefix.preg_replace('/^(?:'.$quoted.')+/u', '', $value);
+        return $prefix . preg_replace('/^(?:' . $quoted . ')+/u', '', $value);
     }
 }
 
-if (! function_exists('str_upper')) {
+if (!function_exists('str_upper')) {
     /**
      * Convert the given string to upper-case.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -678,11 +718,11 @@ if (! function_exists('str_upper')) {
     }
 }
 
-if (! function_exists('str_title')) {
+if (!function_exists('str_title')) {
     /**
      * Convert the given string to title case.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -692,12 +732,12 @@ if (! function_exists('str_title')) {
     }
 }
 
-if (! function_exists('str_snake')) {
+if (!function_exists('str_snake')) {
     /**
      * Convert a string to snake case.
      *
-     * @param  string  $value
-     * @param  string  $delimiter
+     * @param string $value
+     * @param string $delimiter
      *
      * @return string
      */
@@ -713,26 +753,26 @@ if (! function_exists('str_snake')) {
         if (!ctype_lower($value)) {
             $value = preg_replace('/\s+/u', '', ucwords($value));
 
-            $value = str_lower(preg_replace('/(.)(?=[A-Z])/u', '$1'.$delimiter, $value));
+            $value = str_lower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $value));
         }
 
         return $snakeCache[$key][$delimiter] = $value;
     }
 }
 
-if (! function_exists('str_starts_with')) {
+if (!function_exists('str_starts_with')) {
     /**
      * Determine if a given string starts with a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|string[]  $needles
+     * @param string $haystack
+     * @param string|string[] $needles
      *
      * @return bool
      */
     function str_starts_with(string $haystack, $needles): bool
     {
-        foreach ((array) $needles as $needle) {
-            if ((string) $needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0) {
+        foreach ((array)$needles as $needle) {
+            if ((string)$needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0) {
                 return true;
             }
         }
@@ -741,11 +781,11 @@ if (! function_exists('str_starts_with')) {
     }
 }
 
-if (! function_exists('str_studly')) {
+if (!function_exists('str_studly')) {
     /**
      * Convert a value to studly caps case.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -764,27 +804,27 @@ if (! function_exists('str_studly')) {
     }
 }
 
-if (! function_exists('str_pascal')) {
+if (!function_exists('str_pascal')) {
     /**
      * Convert a string to pascal case.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
     function str_pascal(string $value): string
     {
         $words = preg_replace('/[\p{P}]/u', ' ', $value);
-    	
-    	return str_replace(' ', '', ucwords($words));
+
+        return str_replace(' ', '', ucwords($words));
     }
 }
 
-if (! function_exists('str_camel')) {
+if (!function_exists('str_camel')) {
     /**
      * Convert a string to camel case.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -794,13 +834,14 @@ if (! function_exists('str_camel')) {
     }
 }
 
-if (! function_exists('str_uuid4')) {
+if (!function_exists('str_uuid4')) {
     /**
      * Generate a UUID (version 4).
      *
      * @return string
      */
-    function str_uuid4() {
+    function str_uuid4()
+    {
         $bytes = random_bytes(16);
 
         $bytes[6] = chr(ord($bytes[6]) & 0x0f | 0x40);
@@ -810,18 +851,19 @@ if (! function_exists('str_uuid4')) {
     }
 }
 
-if (! function_exists('str_jwt')) {
+if (!function_exists('str_jwt')) {
     /**
      * Generate a JWT.
-     * 
-     * @param  array  $payload
+     *
+     * @param array $payload
      *
      * @return string
      */
-    function str_jwt(array $payload) {
+    function str_jwt(array $payload)
+    {
         $patterns = ['+', '/', '='];
 
-		$replacements = ['-', '_', ''];
+        $replacements = ['-', '_', ''];
 
         $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
         $chain[] = str_replace($patterns, $replacements, base64_encode($header));
@@ -835,11 +877,11 @@ if (! function_exists('str_jwt')) {
         return implode('.', $chain);
     }
 }
-if (! function_exists('class_basename')) {
+if (!function_exists('class_basename')) {
     /**
      * Get the class "basename" of the given object / class.
      *
-     * @param  string|object  $class
+     * @param string|object $class
      * @return string
      */
     function class_basename($class): string
@@ -850,11 +892,11 @@ if (! function_exists('class_basename')) {
     }
 }
 
-if (! function_exists('class_uses_recursive')) {
+if (!function_exists('class_uses_recursive')) {
     /**
      * Returns all traits used by a class, its parent classes and trait of their traits.
      *
-     * @param  object|string  $class
+     * @param object|string $class
      * @return array
      */
     function class_uses_recursive($class): array
@@ -874,11 +916,11 @@ if (! function_exists('class_uses_recursive')) {
 }
 
 
-if (! function_exists('trait_uses_recursive')) {
+if (!function_exists('trait_uses_recursive')) {
     /**
      * Returns all traits used by a trait and its traits.
      *
-     * @param  string  $trait
+     * @param string $trait
      * @return array
      */
     function trait_uses_recursive($trait): array
@@ -892,11 +934,11 @@ if (! function_exists('trait_uses_recursive')) {
         return $traits;
     }
 }
-if (! function_exists('array_accessible')) {
+if (!function_exists('array_accessible')) {
     /**
      * Determine whether the given value is array accessible.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
@@ -906,13 +948,13 @@ if (! function_exists('array_accessible')) {
     }
 }
 
-if (! function_exists('array_add')) {
+if (!function_exists('array_add')) {
     /**
      * Add an element to an array using "dot" notation if it doesn't exist.
      *
-     * @param  array  $array
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param array $array
+     * @param string $key
+     * @param mixed $value
      *
      * @return array
      */
@@ -926,11 +968,11 @@ if (! function_exists('array_add')) {
     }
 }
 
-if (! function_exists('array_collapse')) {
+if (!function_exists('array_collapse')) {
     /**
      * Collapse an array of arrays into a single array.
      *
-     * @param  iterable  $array
+     * @param iterable $array
      *
      * @return array
      */
@@ -950,11 +992,11 @@ if (! function_exists('array_collapse')) {
     }
 }
 
-if (! function_exists('array_cross_join')) {
+if (!function_exists('array_cross_join')) {
     /**
      * Cross join the given arrays, returning all possible permutations.
      *
-     * @param  iterable  ...$arrays
+     * @param iterable ...$arrays
      *
      * @return array
      */
@@ -980,11 +1022,11 @@ if (! function_exists('array_cross_join')) {
     }
 }
 
-if (! function_exists('array_divide')) {
+if (!function_exists('array_divide')) {
     /**
      * Divide an array into two arrays. One with keys and the other with values.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return array
      */
@@ -994,12 +1036,12 @@ if (! function_exists('array_divide')) {
     }
 }
 
-if (! function_exists('array_dot')) {
+if (!function_exists('array_dot')) {
     /**
      * Flatten a multi-dimensional associative array with dots.
      *
-     * @param  iterable  $array
-     * @param  string  $prepend
+     * @param iterable $array
+     * @param string $prepend
      *
      * @return array
      */
@@ -1009,9 +1051,9 @@ if (! function_exists('array_dot')) {
 
         foreach ($array as $key => $value) {
             if (is_array($value) && !empty($value)) {
-                $results = array_merge($results, array_dot($value, $prepend.$key.'.'));
+                $results = array_merge($results, array_dot($value, $prepend . $key . '.'));
             } else {
-                $results[$prepend.$key] = $value;
+                $results[$prepend . $key] = $value;
             }
         }
 
@@ -1019,12 +1061,12 @@ if (! function_exists('array_dot')) {
     }
 }
 
-if (! function_exists('array_except')) {
+if (!function_exists('array_except')) {
     /**
      * Get all of the given array except for a specified array of keys.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
+     * @param array $array
+     * @param array|string $keys
      *
      * @return array
      */
@@ -1036,12 +1078,12 @@ if (! function_exists('array_except')) {
     }
 }
 
-if (! function_exists('array_exists')) {
+if (!function_exists('array_exists')) {
     /**
      * Determine if the given key exists in the provided array.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string|int  $key
+     * @param \ArrayAccess|array $array
+     * @param string|int $key
      *
      * @return bool
      */
@@ -1055,13 +1097,13 @@ if (! function_exists('array_exists')) {
     }
 }
 
-if (! function_exists('array_first')) {
+if (!function_exists('array_first')) {
     /**
      * Return the first element in an array passing a given truth test.
      *
-     * @param  iterable  $array
-     * @param  callable|null  $callback
-     * @param  mixed  $default
+     * @param iterable $array
+     * @param callable|null $callback
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -1087,13 +1129,13 @@ if (! function_exists('array_first')) {
     }
 }
 
-if (! function_exists('array_last')) {
+if (!function_exists('array_last')) {
     /**
      * Return the last element in an array passing a given truth test.
      *
-     * @param  array  $array
-     * @param  callable|null  $callback
-     * @param  mixed  $default
+     * @param array $array
+     * @param callable|null $callback
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -1107,12 +1149,12 @@ if (! function_exists('array_last')) {
     }
 }
 
-if (! function_exists('array_flatten')) {
+if (!function_exists('array_flatten')) {
     /**
      * Flatten a multi-dimensional array into a single level.
      *
-     * @param  iterable  $array
-     * @param  int  $depth
+     * @param iterable $array
+     * @param int $depth
      *
      * @return array
      */
@@ -1138,12 +1180,12 @@ if (! function_exists('array_flatten')) {
     }
 }
 
-if (! function_exists('array_forget')) {
+if (!function_exists('array_forget')) {
     /**
      * Remove one or many array items from a given array using "dot" notation.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
+     * @param array $array
+     * @param array|string $keys
      *
      * @return void
      */
@@ -1151,7 +1193,7 @@ if (! function_exists('array_forget')) {
     {
         $original = &$array;
 
-        $keys = (array) $keys;
+        $keys = (array)$keys;
 
         if (count($keys) === 0) {
             return;
@@ -1185,13 +1227,13 @@ if (! function_exists('array_forget')) {
     }
 }
 
-if (! function_exists('array_get')) {
+if (!function_exists('array_get')) {
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string|int|null  $key
-     * @param  mixed  $default
+     * @param \ArrayAccess|array $array
+     * @param string|int|null $key
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -1225,18 +1267,18 @@ if (! function_exists('array_get')) {
     }
 }
 
-if (! function_exists('array_has')) {
+if (!function_exists('array_has')) {
     /**
      * Check if an item or items exist in an array using "dot" notation.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string|array  $keys
+     * @param \ArrayAccess|array $array
+     * @param string|array $keys
      *
      * @return bool
      */
     function array_has($array, $keys): bool
     {
-        $keys = (array) $keys;
+        $keys = (array)$keys;
 
         if (!$array || $keys === []) {
             return false;
@@ -1262,12 +1304,12 @@ if (! function_exists('array_has')) {
     }
 }
 
-if (! function_exists('array_has_any')) {
+if (!function_exists('array_has_any')) {
     /**
      * Determine if any of the keys exist in an array using "dot" notation.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string|array  $keys
+     * @param \ArrayAccess|array $array
+     * @param string|array $keys
      *
      * @return bool
      */
@@ -1277,7 +1319,7 @@ if (! function_exists('array_has_any')) {
             return false;
         }
 
-        $keys = (array) $keys;
+        $keys = (array)$keys;
 
         if (!$array) {
             return false;
@@ -1297,13 +1339,13 @@ if (! function_exists('array_has_any')) {
     }
 }
 
-if (! function_exists('array_is_assoc')) {
+if (!function_exists('array_is_assoc')) {
     /**
      * Determines if an array is associative.
      *
      * An array is "associative" if it doesn't have sequential numerical keys beginning with zero.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return bool
      */
@@ -1315,28 +1357,28 @@ if (! function_exists('array_is_assoc')) {
     }
 }
 
-if (! function_exists('array_only')) {
+if (!function_exists('array_only')) {
     /**
      * Get a subset of the items from the given array.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
+     * @param array $array
+     * @param array|string $keys
      *
      * @return array
      */
     function array_only(array $array, $keys): array
     {
-        return array_intersect_key($array, array_flip((array) $keys));
+        return array_intersect_key($array, array_flip((array)$keys));
     }
 }
 
-if (! function_exists('array_pluck')) {
+if (!function_exists('array_pluck')) {
     /**
      * Pluck an array of values from an array.
      *
-     * @param  iterable  $array
-     * @param  string|array|int|null  $value
-     * @param  string|array|null  $key
+     * @param iterable $array
+     * @param string|array|int|null $value
+     * @param string|array|null $key
      *
      * @return array
      */
@@ -1360,7 +1402,7 @@ if (! function_exists('array_pluck')) {
                 $itemKey = data_get($item, $key);
 
                 if (is_object($itemKey) && method_exists($itemKey, '__toString')) {
-                    $itemKey = (string) $itemKey;
+                    $itemKey = (string)$itemKey;
                 }
 
                 $results[$itemKey] = $itemValue;
@@ -1371,13 +1413,13 @@ if (! function_exists('array_pluck')) {
     }
 }
 
-if (! function_exists('array_prepend')) {
+if (!function_exists('array_prepend')) {
     /**
      * Push an item onto the beginning of an array.
      *
-     * @param  array  $array
-     * @param  mixed  $value
-     * @param  mixed  $key
+     * @param array $array
+     * @param mixed $value
+     * @param mixed $key
      *
      * @return array
      */
@@ -1393,13 +1435,13 @@ if (! function_exists('array_prepend')) {
     }
 }
 
-if (! function_exists('array_pull')) {
+if (!function_exists('array_pull')) {
     /**
      * Get a value from the array, and remove it.
      *
-     * @param  array  $array
-     * @param  string  $key
-     * @param  mixed  $default
+     * @param array $array
+     * @param string $key
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -1413,11 +1455,11 @@ if (! function_exists('array_pull')) {
     }
 }
 
-if (! function_exists('array_query')) {
+if (!function_exists('array_query')) {
     /**
      * Convert the array into a query string.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return string
      */
@@ -1427,13 +1469,13 @@ if (! function_exists('array_query')) {
     }
 }
 
-if (! function_exists('array_random')) {
+if (!function_exists('array_random')) {
     /**
      * Get one or a specified number of random values from an array.
      *
-     * @param  array  $array
-     * @param  int|null  $number
-     * @param  bool|false  $preserveKeys
+     * @param array $array
+     * @param int|null $number
+     * @param bool|false $preserveKeys
      *
      * @return mixed
      *
@@ -1455,7 +1497,7 @@ if (! function_exists('array_random')) {
             return $array[array_rand($array)];
         }
 
-        if ((int) $number === 0) {
+        if ((int)$number === 0) {
             return [];
         }
 
@@ -1464,11 +1506,11 @@ if (! function_exists('array_random')) {
         $results = [];
 
         if ($preserveKeys) {
-            foreach ((array) $keys as $key) {
+            foreach ((array)$keys as $key) {
                 $results[$key] = $array[$key];
             }
         } else {
-            foreach ((array) $keys as $key) {
+            foreach ((array)$keys as $key) {
                 $results[] = $array[$key];
             }
         }
@@ -1477,15 +1519,15 @@ if (! function_exists('array_random')) {
     }
 }
 
-if (! function_exists('array_set')) {
+if (!function_exists('array_set')) {
     /**
      * Set an array item to a given value using "dot" notation.
      *
      * If no key is given to the method, the entire array will be replaced.
      *
-     * @param  array  $array
-     * @param  string|null  $key
-     * @param  mixed  $value
+     * @param array $array
+     * @param string|null $key
+     * @param mixed $value
      *
      * @return array
      */
@@ -1520,12 +1562,12 @@ if (! function_exists('array_set')) {
     }
 }
 
-if (! function_exists('array_shuffle')) {
+if (!function_exists('array_shuffle')) {
     /**
      * Shuffle the given array and return the result.
      *
-     * @param  array  $array
-     * @param  int|null  $seed
+     * @param array $array
+     * @param int|null $seed
      *
      * @return array
      */
@@ -1543,13 +1585,13 @@ if (! function_exists('array_shuffle')) {
     }
 }
 
-if (! function_exists('array_sort_recursive')) {
+if (!function_exists('array_sort_recursive')) {
     /**
      * Recursively sort an array by keys and values.
      *
-     * @param  array  $array
-     * @param  int  $options
-     * @param  bool  $descending
+     * @param array $array
+     * @param int $options
+     * @param bool $descending
      *
      * @return array
      */
@@ -1575,11 +1617,11 @@ if (! function_exists('array_sort_recursive')) {
     }
 }
 
-if (! function_exists('array_to_css_classes')) {
+if (!function_exists('array_to_css_classes')) {
     /**
      * Conditionally compile classes from an array into a CSS class list.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return string
      */
@@ -1601,12 +1643,12 @@ if (! function_exists('array_to_css_classes')) {
     }
 }
 
-if (! function_exists('array_where')) {
+if (!function_exists('array_where')) {
     /**
      * Filter the array using the given callback.
      *
-     * @param  array  $array
-     * @param  callable  $callback
+     * @param array $array
+     * @param callable $callback
      *
      * @return array
      */
@@ -1616,11 +1658,11 @@ if (! function_exists('array_where')) {
     }
 }
 
-if (! function_exists('array_wrap')) {
+if (!function_exists('array_wrap')) {
     /**
      * If the given value is not an array and not null, wrap it in one.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      *
      * @return array
      */
@@ -1634,13 +1676,13 @@ if (! function_exists('array_wrap')) {
     }
 }
 
-if (! function_exists('data_fill')) {
+if (!function_exists('data_fill')) {
     /**
      * Fill in data where it's missing.
      *
-     * @param  mixed  $target
-     * @param  string|array  $key
-     * @param  mixed  $value
+     * @param mixed $target
+     * @param string|array $key
+     * @param mixed $value
      * @return mixed
      */
     function data_fill(&$target, $key, $value)
@@ -1649,13 +1691,13 @@ if (! function_exists('data_fill')) {
     }
 }
 
-if (! function_exists('data_get')) {
+if (!function_exists('data_get')) {
     /**
      * Get an item from an array or object using "dot" notation.
      *
-     * @param  mixed  $target
-     * @param  string|array|int|null  $key
-     * @param  mixed  $default
+     * @param mixed $target
+     * @param string|array|int|null $key
+     * @param mixed $default
      * @return mixed
      */
     function data_get($target, $key, $default = null)
@@ -1674,7 +1716,7 @@ if (! function_exists('data_get')) {
             }
 
             if ($segment === '*') {
-                if (! is_array($target)) {
+                if (!is_array($target)) {
                     return value($default);
                 }
 
@@ -1700,14 +1742,14 @@ if (! function_exists('data_get')) {
     }
 }
 
-if (! function_exists('data_set')) {
+if (!function_exists('data_set')) {
     /**
      * Set an item on an array or object using dot notation.
      *
-     * @param  mixed  $target
-     * @param  string|array  $key
-     * @param  mixed  $value
-     * @param  bool  $overwrite
+     * @param mixed $target
+     * @param string|array $key
+     * @param mixed $value
+     * @param bool $overwrite
      *
      * @return mixed
      */
@@ -1716,7 +1758,7 @@ if (! function_exists('data_set')) {
         $segments = is_array($key) ? $key : explode('.', $key);
 
         if (($segment = array_shift($segments)) === '*') {
-            if (! array_accessible($target)) {
+            if (!array_accessible($target)) {
                 $target = [];
             }
 
@@ -1731,22 +1773,22 @@ if (! function_exists('data_set')) {
             }
         } elseif (array_accessible($target)) {
             if ($segments) {
-                if (! array_exists($target, $segment)) {
+                if (!array_exists($target, $segment)) {
                     $target[$segment] = [];
                 }
 
                 data_set($target[$segment], $segments, $value, $overwrite);
-            } elseif ($overwrite || ! array_exists($target, $segment)) {
+            } elseif ($overwrite || !array_exists($target, $segment)) {
                 $target[$segment] = $value;
             }
         } elseif (is_object($target)) {
             if ($segments) {
-                if (! isset($target->{$segment})) {
+                if (!isset($target->{$segment})) {
                     $target->{$segment} = [];
                 }
 
                 data_set($target->{$segment}, $segments, $value, $overwrite);
-            } elseif ($overwrite || ! isset($target->{$segment})) {
+            } elseif ($overwrite || !isset($target->{$segment})) {
                 $target->{$segment} = $value;
             }
         } else {
@@ -1763,11 +1805,11 @@ if (! function_exists('data_set')) {
     }
 }
 
-if (! function_exists('head')) {
+if (!function_exists('head')) {
     /**
      * Get the first element of an array. Useful for method chaining.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return mixed
      */
@@ -1777,11 +1819,11 @@ if (! function_exists('head')) {
     }
 }
 
-if (! function_exists('last')) {
+if (!function_exists('last')) {
     /**
      * Get the last element from an array.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return mixed
      */
@@ -1791,11 +1833,11 @@ if (! function_exists('last')) {
     }
 }
 
-if (! function_exists('to_array')) {
+if (!function_exists('to_array')) {
     /**
      * Convert Json into Array.
      *
-     * @param  string  $json
+     * @param string $json
      *
      * @return array
      */

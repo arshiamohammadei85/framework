@@ -5,7 +5,7 @@
  * Licensed under the MIT License
  * =========================================================================== */
 
-namespace ilustrate\Closure;
+namespace illustrate\Closure;
 
 defined('T_NAME_QUALIFIED') || define('T_NAME_QUALIFIED', -4);
 defined('T_NAME_FULLY_QUALIFIED') || define('T_NAME_FULLY_QUALIFIED', -5);

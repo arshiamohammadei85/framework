@@ -5,7 +5,7 @@
  * Licensed under the MIT License
  * =========================================================================== */
 
-namespace ilustrate\Closure;
+namespace illustrate\Closure;
 
 use Closure;
 use Serializable;

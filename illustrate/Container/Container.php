@@ -7,9 +7,8 @@ use illustrate\Closure\SerializableClosure;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionMethod;
-use Serializable;
 
-class Container implements ContainerInterface, Serializable
+class Container implements ContainerInterface
 {
 	/** @var Dependency[] */
 	protected $bindings = [];
@@ -206,7 +205,7 @@ class Container implements ContainerInterface, Serializable
 		}
 
 		if (!$reflection->isInstantiable()) {
-			throw new BindingException("The '${concrete}' type is not instantiable");
+			throw new BindingException("The ". $concrete . " type is not instantiable");
 		}
 
 		if (isset($this->reflectionMethod[$concrete])) {
