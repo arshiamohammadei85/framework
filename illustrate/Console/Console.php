@@ -3,6 +3,7 @@
 namespace illustrate\Console;
 
 use App\Commands\Hello;
+use illustrate\Console\Builder\BaseBuilder;
 use illustrate\Console\Database\DatabaseShow;
 use illustrate\Console\Database\DatabaseTable;
 use illustrate\Console\Database\DatabaseWipe;
@@ -29,32 +30,13 @@ use Symfony\Component\Console\Command;
  * @author  ArshiaMohammadei <arshia8587@gmail.com>
  * @package illustrate\Console
  */
-class Console extends Application
+class Console extends BaseBuilder
 {
-	public $command = [];
+    public $command = [];
 	public function __construct()
 	{
-		return $this->command = [
-			new Serve(),
-			new ViewCache() ,
-			new ViewCompiled(),
-			new DatabaseWipe(),
-			new DatabaseTable(),
-			new Controller(),
-			new Middleware(),
-			new Model(),
-			new RouteList(),
-			new MigrationList(),
-			new MakeMigration(),
-			new MigrationApply(),
-			new AuthSoftwareApplication(),
-			new SoftwareSeacrhApi(),
-			new SoftwareListItemApi(),
-			new ExecuteSoftwareItemApi(),
-			new SoftwareCloneItemApi(),
-			new SoftwareCloneListCodes(),
-			new MigrationFresh(),
-			new MigrationRefresh()
-		];
+        return $this->command = [
+            $this->call(new Serve())
+        ];
 	}
 }

@@ -37,7 +37,7 @@ class Blade implements FactoryContract
 	public function __construct()
 	{
 		$this->container = new Container;
-		$this->setupContainer((array) Helpers::config('view', 'view'), Helpers::config('storage', 'view'));
+		$this->setupContainer((array) config('view', 'view'), Helpers::config('storage', 'view'));
 		(new ViewServiceProvider($this->container))->register();
 		$this->factory = $this->container->get('view');
 		$this->compiler = $this->container->get('blade.compiler');
@@ -46,15 +46,7 @@ class Blade implements FactoryContract
 
 	private function decoding()
 	{
-		$this->directive('form', function ($action){
-			return "<?php  \Reactoot\Phoenix\\form\Form::begin($action);?>";
-		});
-		$this->directive('field', function ($model){
-			return "<?php echo \Reactoot\Phoenix\\form\Form::field($model);?>";
-		});
-		$this->directive('endform', function (){
-			return "<?php \Reactoot\Phoenix\\form\Form::end()?>";
-		});
+        
 	}
 	public function render(string $view, array $data = [], array $mergeData = []): string
 	{
