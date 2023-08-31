@@ -1,43 +1,49 @@
 {
-    "name": "arshiamohammadei85/framework",
-    "description": "Reactoor The Web Framework Arshiamohammadei:)",
-    "keywords": [
-        "reactoor",
-        "framework",
-        "arshiamohammadei"
-    ],
-    "license": "MIT",
-    "homepage": "https://reactoor.ir",
-    "support": {
-        "issues": "https://github.com/arshiamohammadei85/Framework/issues",
-        "source": "https://github.com/arshiamohammadei85/framework"
+  "name": "arshiamohammadei85/framework",
+  "description": "Reactoor The Web Framework Arshiamohammadei:)",
+  "keywords": [
+    "reactoor",
+    "framework",
+    "arshiamohammadei"
+  ],
+  "license": "MIT",
+  "homepage": "https://reactoor.ir",
+  "support": {
+    "issues": "https://github.com/arshiamohammadei85/Framework/issues",
+    "source": "https://github.com/arshiamohammadei85/framework"
+  },
+  "authors": [
+    {
+      "name": "Arshiamohammadei",
+      "email": "08735162656h@gmail.com.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "illuminate/view": "^8.0",
+    "vlucas/phpdotenv": "^5.0",
+    "symfony/console": "^6.3",
+    "symfony/http-foundation": "6.3",
+    "symfony/var-dumper": "^6.3",
+    "symfony/http-kernel": "^6.3",
+    "symfony/finder": "^5.4",
+    "symfony/process": "^6.3",
+    "doctrine/dbal": "^3.6",
+    "symfony/dotenv": "^6.3",
+    "jeremeamia/superclosure": "^2.0",
+    "symfony/asset": "^6.3",
+    "symfony/string": "^6.3",
+    "symfony/form": "^6.3",
+    "symfony/security-csrf": "^6.3",
+    "symfony/web-link": "^6.3",
+    "symfony/mercure": "^0.6.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "illustrate\\": "illustrate/"
     },
-    "authors": [
-        {
-            "name": "Arshiamohammadei",
-            "email": "08735162656h@gmail.com.com"
-        }
-    ],
-    "require": {
-        "php": "^8.1",
-        "illuminate/view": "^8.0",
-        "vlucas/phpdotenv": "^5.0",
-        "symfony/console": "^6.3",
-        "symfony/http-foundation": "6.3",
-        "symfony/var-dumper": "^6.3",
-        "symfony/http-kernel": "^6.3",
-        "symfony/finder": "^5.4",
-        "symfony/process": "^6.3",
-        "doctrine/dbal": "^3.6",
-        "symfony/dotenv": "^6.3",
-        "jeremeamia/superclosure": "^2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "illustrate\\": "illustrate/"
-        },
     "files": [
       "illustrate/Helpers/helpers.php"
     ]
-    }
+  }
 }
